@@ -60,7 +60,6 @@ export const siteConfig = {
   /**
    * Payment + booking submission settings.
    *
-   * - qrImage: drop your UPI QR image at public/payment-qr.png (this path).
    * - upiId: optional. When set, mobile users also get a "Pay with UPI app"
    *   button and a copy-able UPI ID (they can't scan a QR on their own phone).
    * - bookingEndpoint: set VITE_BOOKING_ENDPOINT to a form backend that
@@ -68,7 +67,6 @@ export const siteConfig = {
    *   When empty, the form finishes by sending the details to WhatsApp.
    */
   payment: {
-    qrImage: "/payment-qr.png",
     payeeName: "Mukalp Healing Space",
     upiId: "",
     // Tap-to-pay link shown as the primary payment option in the booking form.

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react"
 import {
   ArrowLeft,
   Check,
-  Copy,
   Gift,
   Heart,
   ImagePlus,
@@ -354,8 +353,6 @@ function PaymentStep({ values, onChange, onStepChange, onResult }: FlowProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [proofError, setProofError] = useState<string | undefined>()
   const [submitting, setSubmitting] = useState(false)
-  const [qrSrc, setQrSrc] = useState<string>(payment.qrImage)
-  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     if (!values.paymentProof) {
@@ -366,22 +363,6 @@ function PaymentStep({ values, onChange, onStepChange, onResult }: FlowProps) {
     setPreviewUrl(url)
     return () => URL.revokeObjectURL(url)
   }, [values.paymentProof])
-
-  const upiLink = payment.upiId
-    ? `upi://pay?pa=${encodeURIComponent(payment.upiId)}&pn=${encodeURIComponent(
-        payment.payeeName
-      )}&am=${pkg.offerPrice}&cu=INR&tn=${encodeURIComponent(pkg.name)}`
-    : null
-
-  const copyUpi = async () => {
-    try {
-      await navigator.clipboard.writeText(payment.upiId)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 1800)
-    } catch {
-      // Clipboard unavailable: the ID is still visible to copy by hand.
-    }
-  }
 
   const handleFile = (file: File | undefined) => {
     if (!file) return
@@ -444,46 +425,6 @@ function PaymentStep({ values, onChange, onStepChange, onResult }: FlowProps) {
           </p>
         </div>
       )}
-
-      {/* QR */}
-      <div className="flex flex-col items-center gap-3 text-center">
-        <div className="rounded-2xl border-2 border-gold/60 bg-white p-3 shadow-[0_0_30px_oklch(0.84_0.15_85/0.3)]">
-          <img
-            src={qrSrc}
-            alt={`UPI QR code to pay ${formatINR(pkg.offerPrice)} to ${payment.payeeName}`}
-            className="size-52 object-contain"
-            onError={() => setQrSrc("/payment-qr-placeholder.svg")}
-          />
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {payment.payLink ? "Or scan this QR code" : "Scan with any UPI app"} and pay {formatINR(pkg.offerPrice)}.
-        </p>
-
-        {upiLink && (
-          <div className="flex w-full flex-col gap-2">
-            <Button asChild variant="outline" size="lg" className="h-11 w-full rounded-full">
-              <a href={upiLink}>
-                <Smartphone className="size-4" />
-                Pay with your UPI app
-              </a>
-            </Button>
-            <button
-              type="button"
-              onClick={copyUpi}
-              className="inline-flex items-center justify-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-            >
-              UPI ID: <span className="font-medium text-foreground">{payment.upiId}</span>
-              {copied ? <Check className="size-3.5 text-primary" /> : <Copy className="size-3.5" />}
-            </button>
-          </div>
-        )}
-        {!upiLink && (
-          <p className="text-xs text-muted-foreground">
-            Paying from this phone? Screenshot the QR, then choose it from your gallery inside your
-            UPI app's scanner.
-          </p>
-        )}
-      </div>
 
       {/* Upload */}
       <div>
