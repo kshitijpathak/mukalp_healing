@@ -422,6 +422,29 @@ function PaymentStep({ values, onChange, onStepChange, onResult }: FlowProps) {
         </p>
       </div>
 
+      {/* Pay link */}
+      {payment.payLink && (
+        <div className="space-y-3 rounded-xl border-2 border-gold/60 bg-gold/10 p-4 text-center">
+          <p className="text-sm font-medium">
+            Click the link below to pay {formatINR(pkg.offerPrice)} to {payment.payeeName} using any UPI app.
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="h-12 w-full rounded-full bg-gradient-to-r from-saffron to-gold text-base font-bold text-night hover:opacity-90"
+          >
+            <a href={payment.payLink} target="_blank" rel="noopener noreferrer">
+              <Smartphone className="size-5" />
+              Click here to pay {formatINR(pkg.offerPrice)}
+            </a>
+          </Button>
+          <p className="text-xs text-muted-foreground">
+            Please enter {formatINR(pkg.offerPrice)} as the amount. After paying, come back here and
+            upload your payment screenshot.
+          </p>
+        </div>
+      )}
+
       {/* QR */}
       <div className="flex flex-col items-center gap-3 text-center">
         <div className="rounded-2xl border-2 border-gold/60 bg-white p-3 shadow-[0_0_30px_oklch(0.84_0.15_85/0.3)]">
@@ -433,7 +456,7 @@ function PaymentStep({ values, onChange, onStepChange, onResult }: FlowProps) {
           />
         </div>
         <p className="text-sm text-muted-foreground">
-          Scan with any UPI app and pay {formatINR(pkg.offerPrice)}.
+          {payment.payLink ? "Or scan this QR code" : "Scan with any UPI app"} and pay {formatINR(pkg.offerPrice)}.
         </p>
 
         {upiLink && (

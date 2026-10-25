@@ -71,6 +71,8 @@ export const siteConfig = {
     qrImage: "/payment-qr.png",
     payeeName: "Mukalp Healing Space",
     upiId: "",
+    // Tap-to-pay link shown as the primary payment option in the booking form.
+    payLink: "https://upi.pe/namitadhariwal8@okhdfcbank?pn=Namita+Dhariwal",
   },
   bookingEndpoint: (import.meta.env.VITE_BOOKING_ENDPOINT as string | undefined) ?? "",
 
