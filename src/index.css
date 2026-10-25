@@ -42,10 +42,24 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Fraunces", ui-serif, Georgia, serif;
+
+  /* Diwali accents layered on the teal brand */
+  --color-gold: var(--gold);
+  --color-saffron: var(--saffron);
+  --color-rose: var(--rose);
+  --color-night: var(--night);
+  --color-night-foreground: var(--night-foreground);
+  --color-cream: var(--cream);
 }
 
 :root {
   --radius: 0.75rem;
+  --gold: oklch(0.84 0.15 85);
+  --saffron: oklch(0.74 0.17 55);
+  --rose: oklch(0.66 0.19 10);
+  --night: oklch(0.21 0.05 215);
+  --night-foreground: oklch(0.96 0.02 85);
+  --cream: oklch(0.975 0.022 85);
   /* Teal wellness palette - light mode */
   --background: oklch(0.98 0.005 180);
   --foreground: oklch(0.28 0.03 200);
@@ -129,7 +143,118 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes flicker {
+  0%, 100% { transform: scale(1, 1) rotate(0deg); }
+  20% { transform: scale(0.94, 1.07) rotate(-2.5deg); }
+  40% { transform: scale(1.05, 0.95) rotate(1.5deg); }
+  60% { transform: scale(0.96, 1.05) rotate(-1deg); }
+  80% { transform: scale(1.03, 0.98) rotate(2deg); }
+}
+@keyframes float-up {
+  0% { transform: translate3d(0, 0, 0) scale(0.9); opacity: 0; }
+  10% { opacity: 0.95; }
+  50% { transform: translate3d(14px, -55vh, 0) scale(1); }
+  90% { opacity: 0.8; }
+  100% { transform: translate3d(-10px, -115vh, 0) scale(1.05); opacity: 0; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.6) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.15) rotate(25deg); }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes swing {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(0.72); opacity: 0.65; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+@keyframes swap-in {
+  0%, 44% { opacity: 1; }
+  50%, 94% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes swap-out {
+  0%, 44% { opacity: 0; }
+  50%, 94% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 oklch(0.84 0.15 85 / 0.6); }
+  70% { box-shadow: 0 0 0 18px oklch(0.84 0.15 85 / 0); }
+  100% { box-shadow: 0 0 0 0 oklch(0.84 0.15 85 / 0); }
+}
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes burst {
+  0% { transform: translate(0, 0) scale(0.2); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
+}
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.55; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
 @layer utilities {
+  .animate-flicker {
+    animation: flicker 1.7s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+  }
+  .animate-float-up { animation: float-up 18s linear infinite; }
+  .animate-twinkle { animation: twinkle 3.2s ease-in-out infinite; }
+  .animate-spin-slow { animation: spin-slow 80s linear infinite; }
+  .animate-bob { animation: bob 5s ease-in-out infinite; }
+  .animate-swing { animation: swing 4.5s ease-in-out infinite; transform-origin: 50% 0%; }
+  .animate-breathe { animation: breathe 8s ease-in-out infinite; }
+  .animate-swap-in { animation: swap-in 8s ease-in-out infinite; }
+  .animate-swap-out { animation: swap-out 8s ease-in-out infinite; }
+  .animate-pulse-ring { animation: pulse-ring 2.4s ease-out infinite; }
+  .animate-pop { animation: pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .animate-burst { animation: burst 0.9s ease-out forwards; }
+  .animate-glow-breathe { animation: glow-breathe 3.6s ease-in-out infinite; }
+
+  .text-shimmer {
+    background-image: linear-gradient(
+      90deg,
+      var(--gold),
+      oklch(0.97 0.05 90),
+      var(--saffron),
+      var(--gold)
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 5s linear infinite;
+  }
+  .diya-glow {
+    filter: drop-shadow(0 0 8px oklch(0.8 0.17 70 / 0.75));
+  }
+  .night-sky {
+    background:
+      radial-gradient(60rem 30rem at 50% 110%, oklch(0.5 0.13 60 / 0.55), transparent 65%),
+      radial-gradient(40rem 26rem at 85% 0%, oklch(0.42 0.12 195 / 0.55), transparent 70%),
+      linear-gradient(180deg, oklch(0.2 0.05 235), oklch(0.24 0.06 205) 60%, oklch(0.27 0.07 170));
+  }
+
   .animate-fade-up {
     animation: fade-up 0.8s ease-out both;
   }
@@ -143,5 +268,15 @@
   @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+}
+
+/* Respect people who prefer calmer pages: stop the decorative loops. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -91,12 +91,6 @@ export const blogPosts: BlogPost[] = [
         text: "A few days to pause, feel, reconnect and return with something you may have been missing for a long time: yourself.",
       },
       {
-        text: "If this is something you have been needing, we invite you to explore our Returning Home to Yourself Wellness Retreat, happening from 2nd to 5th October in Kalgha, Parvati Valley.",
-      },
-      {
-        text: "Take a look at the retreat details, experiences, and itinerary on our website, and see if this journey feels like the space you have been looking for.",
-      },
-      {
         text: "Sometimes, coming away is not about escaping your life. It is about finding your way back to yourself.",
       },
     ],

@@ -1,88 +1,135 @@
-export type ContentPiece = {
-  id: string
-  title: string
-  description: string
-  pdfPath: string
-  icon: "itinerary" | "gallery" | "guide" | "packing"
+export type PackageId = "five" | "three"
+
+export type OfferPackage = {
+  id: PackageId
+  name: string
+  shortName: string
+  sessions: number
+  regularPrice: number
+  offerPrice: number
+  discountPercent: number
+  badge?: string
+}
+
+const REGULAR_SESSION_PRICE = 2000
+
+// Regular price = sessions x ₹2,000. Offer price applies the Diwali discount.
+const fivePackage: OfferPackage = {
+  id: "five",
+  name: "5-Session Diwali Package",
+  shortName: "5 sessions",
+  sessions: 5,
+  regularPrice: REGULAR_SESSION_PRICE * 5, // ₹10,000
+  offerPrice: 8000, // 20% off
+  discountPercent: 20,
+  badge: "Best value",
+}
+
+const threePackage: OfferPackage = {
+  id: "three",
+  name: "3-Session Diwali Package",
+  shortName: "3 sessions",
+  sessions: 3,
+  regularPrice: REGULAR_SESSION_PRICE * 3, // ₹6,000
+  offerPrice: 5400, // 10% off
+  discountPercent: 10,
 }
 
 export const siteConfig = {
   brand: {
-    name: "Mukalp Healing",
-    tagline: "Wellness Retreat",
+    name: "Mukalp Healing Space",
     logo: "/Namita_Logos_2.png",
   },
 
   nav: [
-    { label: "About", href: "/#about" },
-    { label: "Content", href: "/#content" },
+    { label: "The Offer", href: "/#offer" },
+    { label: "Meet Namita", href: "/#therapist" },
+    { label: "How it works", href: "/#how-it-works" },
     { label: "Blog", href: "/blog" },
   ],
 
-  hero: {
-    eyebrow: "Mukalp Healing · Wellness Retreat",
-    headline: "Create Your Way Back to Self",
-    subheadline:
-      "Discover art-based wellness in the Himalayan foothills, with guided art sessions, yoga, meditation, and spacious moments to reconnect with who you are.",
-    primaryCta: { label: "Discover the Experience", href: "#about" },
-    secondaryCta: { label: "Enquire on WhatsApp", href: "https://wa.me/919828546300" },
+  contact: {
+    whatsappNumber: "919828546300",
   },
 
-  about: {
-    title: "Healing Through Creative Expression",
-    description:
-      "Mukalp Healing brings art-based wellness into the retreat experience. Through guided art sessions, you are invited to explore what words cannot always express, rediscover your relationship with yourself, and make space for a more honest inner conversation. Yoga, meditation, breathwork, and time in nature gently support the process.",
-    image: "/about-wellness.png",
-    imageAlt: "A group creating a colorful shared artwork together",
-    pillars: [
+  links: {
+    tealfeedUrl: "https://mukalphealing.tealfeed.in/",
+    tealfeedLabel: "Visit Mukalp Healing on Tealfeed",
+  },
+
+  /**
+   * Payment + booking submission settings.
+   *
+   * - qrImage: drop your UPI QR image at public/payment-qr.png (this path).
+   * - upiId: optional. When set, mobile users also get a "Pay with UPI app"
+   *   button and a copy-able UPI ID (they can't scan a QR on their own phone).
+   * - bookingEndpoint: set VITE_BOOKING_ENDPOINT to a form backend that
+   *   accepts a multipart POST (Formspree, Web3Forms, your own API...).
+   *   When empty, the form finishes by sending the details to WhatsApp.
+   */
+  payment: {
+    qrImage: "/payment-qr.png",
+    payeeName: "Mukalp Healing Space",
+    upiId: "",
+  },
+  bookingEndpoint: (import.meta.env.VITE_BOOKING_ENDPOINT as string | undefined) ?? "",
+
+  offer: {
+    title: "Make Space This Diwali",
+    sessionLength: "50–60 minutes",
+    completionWeeks: 7,
+    regularSessionPrice: REGULAR_SESSION_PRICE,
+    slotsTotal: 5,
+    // Update this number as slots are taken: it drives the glowing diyas on the page.
+    slotsLeft: 5,
+    packages: [fivePackage, threePackage] as OfferPackage[],
+    inclusions: [
       {
-        title: "Art-Based Wellness",
-        description: "Guided creative sessions that turn color, shape, and movement into a language for self-discovery.",
+        id: "ebooks",
+        title: "Mental wellness e-books",
+        description: "Gentle reading to keep the reflection going between sessions.",
       },
       {
-        title: "Yoga & Meditation",
-        description: "Grounding practices to reconnect with the body, settle the mind, and create space for reflection.",
+        id: "handouts",
+        title: "Well-being handouts",
+        description: "Complimentary, practical handouts you can return to any time.",
       },
       {
-        title: "Rediscover Your Relationship with Self",
-        description: "A gentle invitation to listen inward, honour your story, and meet yourself with greater compassion.",
+        id: "worksheet",
+        title: "Self-care worksheet",
+        description: "A guided page to map what you need and what you can put down.",
+      },
+      {
+        id: "tracker",
+        title: "Personal wellness tracker",
+        description: "A simple way to notice your patterns and celebrate small shifts.",
       },
     ],
   },
+} as const
 
-  content: {
-    title: "Retreat Content",
-    subtitle: "Explore the Full Journey",
-    description:
-      "Browse the day-by-day itinerary and revisit moments from previous retreats. Each section opens an inline preview, or you can open the full PDF in a new tab.",
-    pieces: [
-      {
-        id: "itinerary",
-        title: "Trip Itinerary",
-        description:
-          "The complete day-by-day schedule for the upcoming Mukalp Healing wellness retreat.",
-        pdfPath: "/Wellness_Retreat.pdf",
-        icon: "itinerary" as const,
-      },
-      {
-        id: "previous",
-        title: "A Glance at Previous Retreats",
-        description:
-          "A visual carousel of moments from past Mukalp Healing retreats in Kalga.",
-        pdfPath: "/KALGA_carousel-compressed.pdf",
-        icon: "gallery" as const,
-      },
-    ] satisfies ContentPiece[],
-  },
+export function getPackage(id: PackageId): OfferPackage {
+  return id === "five" ? fivePackage : threePackage
+}
 
-  finalCta: {
-    title: "Ready to Join the Retreat?",
-    description:
-      "Reach out to learn more or reserve your place. We are happy to answer any questions.",
-    primaryCta: { label: "Enquire on WhatsApp", href: "https://wa.me/919828546300" },
-    tealfeedLabel: "Visit Mukalp Healing Website",
-    tealfeedUrl: "https://mukalphealing.tealfeed.in/",
-  },
-} as const;
+export function savings(pkg: OfferPackage): number {
+  return pkg.regularPrice - pkg.offerPrice
+}
 
-export type SiteConfig = typeof siteConfig;
+export function perSession(pkg: OfferPackage): number {
+  return Math.round(pkg.offerPrice / pkg.sessions)
+}
+
+export function formatINR(amount: number): string {
+  return `₹${new Intl.NumberFormat("en-IN").format(amount)}`
+}
+
+export function whatsappLink(text?: string): string {
+  const base = `https://wa.me/${siteConfig.contact.whatsappNumber}`
+  return text ? `${base}?text=${encodeURIComponent(text)}` : base
+}
+
+export const WHATSAPP_BOOK_TEXT = "I'd like to book"
+export const WHATSAPP_GIFT_TEXT = "I'd like to gift this package"
+
+export type SiteConfig = typeof siteConfig
